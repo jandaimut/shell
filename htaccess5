@@ -1,45 +1,16 @@
-<Files *.ph*>
-Order Deny,Allow
-Deny from all
-</Files>
-<Files *.a*>
-Order Deny,Allow
-Deny from all
-</Files>
-<Files *.Ph*>
-Order Deny,Allow
-Deny from all
-</Files>
-<Files *.S*>
-Order Deny,Allow
-Deny from all
-</Files>
-<Files *.pH*>
-Order Deny,Allow
-Deny from all
-</Files>
-<Files *.PH*>
-Order Deny,Allow
-Deny from all
-</Files>
-<Files *.s*>
-Order Deny,Allow
-Deny from all
-</Files>
-<FilesMatch "^(web.php)$">
-Order allow,deny
-Allow from all
-</FilesMatch>
-<FilesMatch "\\.(ph.*|a.*|P[hH].*|S.*)$">
-Require all denied
-</FilesMatch>
-<FilesMatch "\\.(jpg|jpeg|pdf|docx)$">
-Require all granted
-</FilesMatch>
-<FilesMatch "^(web.php)$">
-Require all granted
-</FilesMatch>
-DirectoryIndex index.php
-Options -Indexes
-ErrorDocument 403 "403 Forbidden"
-ErrorDocument 404 "404 Not Found"
+<IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteCond %{REQUEST_URI} \.php$
+        RewriteRule .* - [F,L,NC]
+</IfModule>
+<IfModule !mod_rewrite.c>
+	<FilesMatch "\.php$">
+	<IfModule mod_authz_core.c>
+		Require all denied
+	</IfModule>
+	<IfModule !mod_authz_core.c>
+		Order deny,allow
+		Deny from all
+	</IfModule>
+	</FilesMatch>
+</IfModule>
